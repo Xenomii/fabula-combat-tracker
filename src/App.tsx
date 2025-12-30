@@ -141,7 +141,7 @@ function App() {
       {sortedCombatants.length === 0 ? (
         <div className="setup-screen">
           <div className="title-with-logo">
-            <img src="/logo.png" alt="Fabula Ultima" className="logo-image" />
+            <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Fabula Ultima" className="logo-image" />
             <h1>Fabula Ultima Combat Tracker</h1>
           </div>
           <p>Add combatants to begin battle!</p>
