@@ -1,0 +1,131 @@
+.add-combatant-btn {
+  background: linear-gradient(135deg, #6eb5e0 0%, #5aa5d0 100%);
+  color: #000;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(110, 181, 224, 0.3);
+  transition: all 0.3s ease;
+  margin: 20px;
+}
+
+.add-combatant-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(110, 181, 224, 0.5);
+}
+
+.add-combatant-form {
+  background: linear-gradient(135deg, #2a2d3a 0%, #1e2028 100%);
+  border-radius: 12px;
+  padding: 25px;
+  margin: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 2px solid #6eb5e0;
+  max-width: 400px;
+}
+
+.add-combatant-form h3 {
+  color: #fff;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.4em;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  color: #fff;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  background: #1a1c24;
+  border: 1px solid #3a3d4a;
+  color: #fff;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 1em;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #6eb5e0;
+  box-shadow: 0 0 8px rgba(110, 181, 224, 0.4);
+}
+
+.type-selector {
+  display: flex;
+  gap: 10px;
+}
+
+.type-selector button {
+  flex: 1;
+  background: #3a3d4a;
+  color: #fff;
+  border: 2px solid #4a4d5a;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.type-selector button:hover {
+  background: #4a4d5a;
+}
+
+.type-selector button.active {
+  background: #6eb5e0;
+  border-color: #6eb5e0;
+  color: #000;
+  box-shadow: 0 0 12px rgba(110, 181, 224, 0.5);
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.submit-btn {
+  flex: 1;
+  background: linear-gradient(135deg, #ff9d4a 0%, #ffb84a 100%);
+  color: #000;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.submit-btn:hover {
+  background: linear-gradient(135deg, #ffb84a 0%, #ffc84a 100%);
+  transform: scale(1.05);
+}
+
+.cancel-btn {
+  flex: 1;
+  background: #ff4a4a;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancel-btn:hover {
+  background: #df3a3a;
+  transform: scale(1.05);
+}

@@ -1,0 +1,383 @@
+.app {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #4a7ca8 0%, #2a5078 50%, #1a3048 100%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.5s ease;
+}
+
+/* Background Presets */
+.app.bg-default {
+  background-image: url('/backgrounds/default.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.app.bg-forest {
+  background-image: url('/backgrounds/forest.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.app.bg-cave {
+  background-image: url('/backgrounds/cave.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.app.bg-desert {
+  background-image: url('/backgrounds/desert.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.app.bg-ocean {
+  background-image: url('/backgrounds/ocean.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.app.bg-volcano {
+  background-image: url('/backgrounds/volcano.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.battle-header {
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bg-toggle-btn {
+  background: rgba(42, 58, 90, 0.8);
+  border: 2px solid #6eb5e0;
+  color: #fff;
+  font-size: 1.5em;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.bg-toggle-btn:hover {
+  background: rgba(110, 181, 224, 0.3);
+  transform: scale(1.1);
+}
+
+.round-display {
+  background: linear-gradient(135deg, #3a5a88 0%, #2a4a78 100%);
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1.2em;
+  border: 2px solid #6eb5e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.setup-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.title-with-logo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo-image {
+  height: 80px;
+  width: auto;
+  filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.8));
+}
+
+.setup-screen h1 {
+  font-size: 3em;
+  color: #6eb5e0;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+  margin: 0;
+}
+
+.setup-screen p {
+  font-size: 1.5em;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.setup-bg-btn {
+  background: linear-gradient(135deg, #6eb5e0 0%, #5aa5d0 100%);
+  color: #000;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(110, 181, 224, 0.3);
+  transition: all 0.3s ease;
+}
+
+.setup-bg-btn:hover {
+  background: linear-gradient(135deg, #7ec5f0 0%, #6ab5e0 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(110, 181, 224, 0.5);
+}
+
+.battlefield {
+  flex: 1;
+  display: flex;
+  padding: 40px;
+  gap: 40px;
+  align-items: center;
+}
+
+.enemies-area {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.players-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.battle-menu {
+  background: linear-gradient(135deg, #2a3a5a 0%, #1a2a4a 100%);
+  border-top: 3px solid #6eb5e0;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.menu-left {
+  flex: 1;
+}
+
+.turn-info {
+  padding: 10px 20px;
+}
+
+.current-turn {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.turn-label {
+  color: #6eb5e0;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.turn-name {
+  color: #ff9d4a;
+  font-size: 1.3em;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.menu-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.action-btn {
+  background: linear-gradient(135deg, #3a5a88 0%, #2a4a78 100%);
+  color: #fff;
+  border: 2px solid #6eb5e0;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.action-btn:hover {
+  background: linear-gradient(135deg, #4a6a98 0%, #3a5a88 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.action-btn.next-turn {
+  background: linear-gradient(135deg, #ff9d4a 0%, #ffb84a 100%);
+  color: #000;
+  border-color: #ffc84a;
+}
+
+.action-btn.next-turn:hover {
+  background: linear-gradient(135deg, #ffad5a 0%, #ffc85a 100%);
+}
+
+.action-btn.danger {
+  background: linear-gradient(135deg, #c84a4a 0%, #a83a3a 100%);
+  border-color: #ff6a6a;
+}
+
+.action-btn.danger:hover {
+  background: linear-gradient(135deg, #d85a5a 0%, #b84a4a 100%);
+}
+
+.add-combatant-modal,
+.background-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.add-combatant-modal.show,
+.background-modal.show {
+  display: flex;
+}
+
+.modal-content {
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #ff4a4a;
+  color: #fff;
+  border: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  font-size: 1.5em;
+  cursor: pointer;
+  z-index: 1001;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.modal-close:hover {
+  background: #ff6a6a;
+  transform: scale(1.1);
+}
+
+/* Background Selector */
+.background-selector {
+  background: linear-gradient(135deg, #2a2d3a 0%, #1e2028 100%);
+  border-radius: 12px;
+  padding: 25px;
+  border: 2px solid #6eb5e0;
+  min-width: 400px;
+}
+
+.background-selector h3 {
+  color: #6eb5e0;
+  margin: 0 0 20px 0;
+  font-size: 1.5em;
+  text-align: center;
+}
+
+.bg-presets {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.bg-option {
+  background: linear-gradient(135deg, #3a5a88 0%, #2a4a78 100%);
+  color: #fff;
+  border: 2px solid #4a6a98;
+  padding: 15px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.bg-option:hover {
+  background: linear-gradient(135deg, #4a6a98 0%, #3a5a88 100%);
+  transform: translateY(-2px);
+}
+
+.bg-option.active {
+  background: linear-gradient(135deg, #ff9d4a 0%, #ffb84a 100%);
+  color: #000;
+  border-color: #ffc84a;
+  box-shadow: 0 0 15px rgba(255, 157, 74, 0.5);
+}
+
+.custom-bg {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid #3a4a6a;
+}
+
+.upload-label {
+  display: block;
+  background: linear-gradient(135deg, #6eb5e0 0%, #5aa5d0 100%);
+  color: #000;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.upload-label:hover {
+  background: linear-gradient(135deg, #7ec5f0 0%, #6ab5e0 100%);
+  transform: translateY(-2px);
+}
+
+.file-input {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .battlefield {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .enemies-area {
+    justify-content: center;
+  }
+
+  .players-area {
+    align-items: center;
+  }
+
+  .menu-actions {
+    flex-wrap: wrap;
+  }
+
+  .action-btn {
+    font-size: 0.9em;
+    padding: 10px 16px;
+  }
+}
