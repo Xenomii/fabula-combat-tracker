@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import type { Combatant } from './types';
 import { CombatantCard } from './components/CombatantCard';
 import { AddCombatant } from './components/AddCombatant';
+import logo from './assets/logo.png';
 import './App.css';
 
 function App() {
@@ -141,13 +142,10 @@ function App() {
       {sortedCombatants.length === 0 ? (
         <div className="setup-screen">
           <div className="title-with-logo">
-            <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Fabula Ultima" className="logo-image" />
+            <img src={logo} alt="Fabula Ultima" className="logo-image" />
             <h1>Fabula Ultima Combat Tracker</h1>
           </div>
           <p>Add combatants to begin battle!</p>
-          <button className="setup-bg-btn" onClick={() => document.querySelector('.background-modal')?.classList.add('show')}>
-            🎨 Choose Background
-          </button>
           <AddCombatant onAdd={addCombatant} />
         </div>
       ) : (
