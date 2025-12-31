@@ -6,10 +6,23 @@ interface AddCombatantProps {
   onAdd: (combatant: Combatant) => void;
 }
 
+const PLAYER_SPRITES = [
+  'blair clarimonde.webp',
+  'cassandra.webp',
+  'desdemona-perses.webp',
+  'edgar.webp',
+  'lavigne-fallbright.webp'
+];
+const ENEMY_SPRITES = [
+  'elonian-trooper.webp',
+  'hexeye.webp'
+];
+
 export function AddCombatant({ onAdd }: AddCombatantProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState('');
   const [type, setType] = useState<CombatantType>('player');
+  const [sprite, setSprite] = useState('');
   const [initiative, setInitiative] = useState(10);
   const [maxHp, setMaxHp] = useState(50);
   const [maxMp, setMaxMp] = useState(30);
@@ -22,6 +35,7 @@ export function AddCombatant({ onAdd }: AddCombatantProps) {
       id: Math.random().toString(36).substr(2, 9),
       name: name.trim(),
       type,
+      sprite: sprite || undefined,
       initiative,
       maxHp,
       currentHp: maxHp,
@@ -36,6 +50,7 @@ export function AddCombatant({ onAdd }: AddCombatantProps) {
     
     // Reset form
     setName('');
+    setSprite('');
     setInitiative(10);
     setMaxHp(50);
     setMaxMp(30);
@@ -71,18 +86,30 @@ export function AddCombatant({ onAdd }: AddCombatantProps) {
             <button
               type="button"
               className={type === 'player' ? 'active' : ''}
-              onClick={() => setType('player')}
+              onClick={() => { setType('player'); setSprite(''); }}
             >
               Player
             </button>
             <button
               type="button"
               className={type === 'enemy' ? 'active' : ''}
-              onClick={() => setType('enemy')}
+              onClick={() => { setType('enemy'); setSprite(''); }}
             >
               Enemy
             </button>
           </div>
+        </div>
+
+        <div className="form-group">
+          <label>Sprite:</label>
+          <select value={sprite} onChange={(e) => setSprite(e.target.value)}>
+            <option value="">Default (Emoji)</option>
+            {(type === 'player' ? PLAYER_SPRITES : ENEMY_SPRITES).map(s => (
+              <option key={s} value={s}>
+                {s.replace('.webp', '').replace('.png', '').replace(/-/g, ' ').split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="form-group">

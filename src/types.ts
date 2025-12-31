@@ -6,6 +6,7 @@ export interface Combatant {
   id: string;
   name: string;
   type: CombatantType;
+  sprite?: string; // Optional sprite filename (e.g., 'warrior.png')
   initiative: number;
   maxHp: number;
   currentHp: number;
@@ -14,6 +15,7 @@ export interface Combatant {
   isFlying: boolean;
   statusEffects: StatusEffect[];
   isDead: boolean;
+  hasActedThisRound?: boolean; // Track if player has acted this round
 }
 
 export interface DamageAnimation {

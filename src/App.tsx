@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 import type { Combatant } from './types';
 import { CombatantCard } from './components/CombatantCard';
 import { AddCombatant } from './components/AddCombatant';
+import { starterAdventureEncounter, loadEncounter } from './data/starterAdventure';
 import logo from './assets/logo.png';
 import './App.css';
 
 function App() {
   const [combatants, setCombatants] = useState<Combatant[]>([]);
-  const [currentTurnIndex, setCurrentTurnIndex] = useState(0);
-  const [round, setRound] = useState(1);
+  const [activePlayerId, setActivePlayerId] = useState<string | null>(null);
   const [background, setBackground] = useState('default');
   const [customBg, setCustomBg] = useState('');
 
@@ -22,8 +22,6 @@ function App() {
       try {
         const data = JSON.parse(saved);
         setCombatants(data.combatants || []);
-        setCurrentTurnIndex(data.currentTurnIndex || 0);
-        setRound(data.round || 1);
         setBackground(data.background || 'default');
         setCustomBg(data.customBg || '');
       } catch (e) {
@@ -36,12 +34,10 @@ function App() {
   useEffect(() => {
     localStorage.setItem('fabula-combat-tracker', JSON.stringify({
       combatants,
-      currentTurnIndex,
-      round,
       background,
       customBg
     }));
-  }, [combatants, currentTurnIndex, round, background, customBg]);
+  }, [combatants, background, customBg]);
 
   const addCombatant = (combatant: Combatant) => {
     setCombatants(prev => [...prev, combatant]);
@@ -53,38 +49,33 @@ function App() {
 
   const removeCombatant = (id: string) => {
     setCombatants(prev => prev.filter(c => c.id !== id));
-    if (currentTurnIndex >= sortedCombatants.length - 1) {
-      setCurrentTurnIndex(0);
-    }
   };
 
-  const nextTurn = () => {
-    const aliveCombatants = sortedCombatants.filter(c => !c.isDead);
-    if (aliveCombatants.length === 0) return;
+  const endTurn = () => {
+    // Clear all acted marks
+    setCombatants(prev => prev.map(c => ({
+      ...c,
+      hasActedThisRound: false
+    })));
+    setActivePlayerId(null);
+  };
 
-    let nextIndex = currentTurnIndex + 1;
-    if (nextIndex >= sortedCombatants.length) {
-      nextIndex = 0;
-      setRound(prev => prev + 1);
-    }
+  const selectActivePlayer = (playerId: string) => {
+    setActivePlayerId(playerId);
+  };
 
-    // Skip dead combatants
-    while (sortedCombatants[nextIndex]?.isDead && nextIndex < sortedCombatants.length) {
-      nextIndex++;
-      if (nextIndex >= sortedCombatants.length) {
-        nextIndex = 0;
-        setRound(prev => prev + 1);
-      }
-    }
-
-    setCurrentTurnIndex(nextIndex);
+  const markPlayerAsActed = (playerId: string) => {
+    setCombatants(prev => prev.map(c => 
+      c.id === playerId ? { ...c, hasActedThisRound: true } : c
+    ));
+    // Clear active player selection after marking as acted
+    setActivePlayerId(null);
   };
 
   const resetCombat = () => {
     if (confirm('Reset combat? This will clear all combatants.')) {
       setCombatants([]);
-      setCurrentTurnIndex(0);
-      setRound(1);
+      setActivePlayerId(null);
     }
   };
 
@@ -95,13 +86,18 @@ function App() {
       currentMp: c.maxMp,
       isDead: false,
       statusEffects: [],
-      isFlying: false
+      isFlying: false,
+      hasActedThisRound: false
     })));
-    setCurrentTurnIndex(0);
-    setRound(1);
+    setActivePlayerId(null);
   };
 
-  const currentCombatant = sortedCombatants[currentTurnIndex];
+  const loadStarterAdventure = () => {
+    const combatantsToLoad = loadEncounter(starterAdventureEncounter);
+    setCombatants(combatantsToLoad);
+    setBackground('cave');
+    setActivePlayerId(null);
+  };
 
   const enemies = sortedCombatants.filter(c => c.type === 'enemy');
   const players = sortedCombatants.filter(c => c.type === 'player');
@@ -130,13 +126,16 @@ function App() {
     return {};
   };
 
+  const handleBackgroundClick = () => {
+    setActivePlayerId(null);
+  };
+
   return (
-    <div className={`app bg-${background}`} style={getBgStyle()}>
-      <div className="battle-header">
+    <div className={`app bg-${background}`} style={getBgStyle()} onClick={handleBackgroundClick}>
+      <div className="battle-header" onClick={(e) => e.stopPropagation()}>
         <button className="bg-toggle-btn" onClick={() => document.querySelector('.background-modal')?.classList.add('show')} title="Change Background">
           🎨
         </button>
-        <div className="round-display">Round {round}</div>
       </div>
 
       {sortedCombatants.length === 0 ? (
@@ -146,7 +145,13 @@ function App() {
             <h1>Fabula Ultima Combat Tracker</h1>
           </div>
           <p>Add combatants to begin battle!</p>
-          <AddCombatant onAdd={addCombatant} />
+          <div className="setup-options">
+            <button className="starter-adventure-btn" onClick={loadStarterAdventure}>
+              📖 Load Starter Adventure
+            </button>
+            <div className="divider">or</div>
+            <AddCombatant onAdd={addCombatant} />
+          </div>
         </div>
       ) : (
         <>
@@ -156,9 +161,12 @@ function App() {
                 <CombatantCard
                   key={combatant.id}
                   combatant={combatant}
-                  isActive={currentCombatant?.id === combatant.id}
+                  isActive={activePlayerId === combatant.id}
                   onUpdate={updateCombatant}
                   onRemove={removeCombatant}
+                  onSelect={() => selectActivePlayer(combatant.id)}
+                  isSelectable={true}
+                  onMarkAsActed={() => markPlayerAsActed(combatant.id)}
                 />
               ))}
             </div>
@@ -168,28 +176,21 @@ function App() {
                 <CombatantCard
                   key={combatant.id}
                   combatant={combatant}
-                  isActive={currentCombatant?.id === combatant.id}
+                  isActive={activePlayerId === combatant.id}
                   onUpdate={updateCombatant}
                   onRemove={removeCombatant}
+                  onSelect={() => selectActivePlayer(combatant.id)}
+                  isSelectable={true}
+                  onMarkAsActed={() => markPlayerAsActed(combatant.id)}
                 />
               ))}
             </div>
           </div>
 
-          <div className="battle-menu">
-            <div className="menu-left">
-              <div className="turn-info">
-                {currentCombatant && (
-                  <div className="current-turn">
-                    <span className="turn-label">Current Turn:</span>
-                    <span className="turn-name">{currentCombatant.name}</span>
-                  </div>
-                )}
-              </div>
-            </div>
+          <div className="battle-menu" onClick={(e) => e.stopPropagation()}>
             <div className="menu-actions">
-              <button className="action-btn next-turn" onClick={nextTurn}>
-                Next Turn
+              <button className="action-btn end-turn" onClick={endTurn}>
+                End Turn
               </button>
               <button className="action-btn" onClick={() => document.querySelector('.add-combatant-modal')?.classList.add('show')}>
                 Add Combatant

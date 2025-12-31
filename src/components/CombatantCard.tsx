@@ -7,9 +7,12 @@ interface CombatantCardProps {
   isActive: boolean;
   onUpdate: (combatant: Combatant) => void;
   onRemove: (id: string) => void;
+  onSelect?: () => void;
+  isSelectable?: boolean;
+  onMarkAsActed?: () => void;
 }
 
-export function CombatantCard({ combatant, isActive, onUpdate, onRemove }: CombatantCardProps) {
+export function CombatantCard({ combatant, isActive, onUpdate, onRemove, onSelect, isSelectable, onMarkAsActed }: CombatantCardProps) {
   const [animations, setAnimations] = useState<DamageAnimation[]>([]);
   const [editMode, setEditMode] = useState(false);
 
@@ -59,14 +62,49 @@ export function CombatantCard({ combatant, isActive, onUpdate, onRemove }: Comba
 
   const [showDetails, setShowDetails] = useState(false);
 
+  // Close details when no longer active
+  useEffect(() => {
+    if (!isActive) {
+      setShowDetails(false);
+    }
+  }, [isActive]);
+
+  const handleCardClick = () => {
+    if (isActive) {
+      // If already active, toggle details
+      setShowDetails(!showDetails);
+    } else {
+      // If not active, select and open details
+      if (onSelect) {
+        onSelect();
+      }
+      setShowDetails(true);
+    }
+  };
+
   return (
     <div 
-      className={`combatant-card ${combatant.type} ${isActive ? 'active' : ''} ${combatant.isDead ? 'dead' : ''} ${combatant.isFlying ? 'flying' : ''}`}
-      onClick={() => setShowDetails(!showDetails)}
+      className={`combatant-card ${combatant.type} ${isActive ? 'active' : ''} ${combatant.isDead ? 'dead' : ''} ${combatant.isFlying ? 'flying' : ''} ${isSelectable && combatant.type === 'player' ? 'selectable' : ''} ${combatant.hasActedThisRound ? 'acted' : ''} ${combatant.type === 'player' ? 'flip-details' : ''}`}
+      onClick={(e) => {
+        e.stopPropagation();
+        handleCardClick();
+      }}
     >
       <div className="card-main">
         <div className="sprite-placeholder">
-          {combatant.type === 'enemy' ? '👹' : '⚔️'}
+          {combatant.sprite ? (
+            <img 
+              src={`${import.meta.env.BASE_URL}sprites/${combatant.type}/${encodeURIComponent(combatant.sprite)}`} 
+              alt={combatant.name}
+              onError={(e) => {
+                // Fallback to emoji if image fails to load
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.textContent = combatant.type === 'enemy' ? '👹' : '⚔️';
+              }}
+            />
+          ) : (
+            combatant.type === 'enemy' ? '👹' : '⚔️'
+          )}
         </div>
         
         <div className="combatant-info">
@@ -108,6 +146,10 @@ export function CombatantCard({ combatant, isActive, onUpdate, onRemove }: Comba
               ))}
             </div>
           )}
+          
+          {combatant.hasActedThisRound && (
+            <div className="acted-indicator">✓ Acted</div>
+          )}
         </div>
       </div>
 
@@ -115,6 +157,17 @@ export function CombatantCard({ combatant, isActive, onUpdate, onRemove }: Comba
         <div className="card-details" onClick={(e) => e.stopPropagation()}>
           <button className="close-details" onClick={() => setShowDetails(false)}>Close</button>
           <button className="remove-btn" onClick={() => onRemove(combatant.id)}>Remove</button>
+          {onMarkAsActed && (
+            <button 
+              className={`mark-acted-btn ${combatant.hasActedThisRound ? 'active' : ''}`}
+              onClick={() => {
+                onMarkAsActed();
+                setShowDetails(false);
+              }}
+            >
+              {combatant.hasActedThisRound ? '✓ Acted' : 'Mark as Acted'}
+            </button>
+          )}
           
           <div className="detail-controls">
             <div className="control-group">
